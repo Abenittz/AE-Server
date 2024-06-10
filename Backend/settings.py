@@ -13,6 +13,10 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+import dj_database_url
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 load_dotenv()
 
@@ -29,7 +33,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "Abenittz.pythonanywhere.com"]
 
 
 # Application definition
@@ -45,8 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'corsheaders',
     'api.apps.ApiConfig',
-    'app.apps.AppConfig',
-    'admin_site.apps.AdminSiteConfig',
+    
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -79,8 +83,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            "app/template",
-            "admin_site/template",
+            
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -100,16 +103,14 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -148,10 +149,10 @@ USE_TZ = True
 STATIC_URL = '/assets/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "app/template/build/assets"),
-    os.path.join(BASE_DIR, "admin_site/template/build/assets"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "app/template/build/assets"),
+#     os.path.join(BASE_DIR, "admin_site/template/build/assets"),
+# ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
