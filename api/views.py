@@ -25,6 +25,9 @@ import yagmail
 
 
 
+
+    
+
 def generate_attendees_pdf(event):
     buffer = BytesIO()
     response = HttpResponse(content_type='application/pdf')
