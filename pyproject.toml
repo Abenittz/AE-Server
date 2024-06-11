@@ -21,6 +21,7 @@ reportlab = "^4.2.0"
 yagmail = "^0.15.293"
 pymysql = "^1.1.1"
 dj-database-url = "^2.2.0"
+psycopg2 = "^2.9.9"
 
 
 [build-system]
