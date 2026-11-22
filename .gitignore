@@ -4,7 +4,6 @@ __pycache__/
 
 *.env
 
-/.vscode
 .DS_Store
 
 ./migrations/
@@ -13,3 +12,5 @@ venv/
 env/
 .env/
 pip-lock.txt
+config.bat
+node_modules
