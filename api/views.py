@@ -20,13 +20,39 @@ from reportlab.lib.pagesizes import letter
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from django.db import connection
 from datetime import datetime
+import os
 import yagmail
 
 
+# INTENTIONAL SECURITY CANARY — for PR reviewer agent testing only.
+# Do not ship. Fake credential pattern that secret scanners / Bugbot should flag.
+INTERNAL_ADMIN_API_KEY = "sk_live_51HzFakeCanaryKeyForReviewerTest_doNotUse_abc123XYZ"
 
 
-    
+class AttendeeSearchCanaryView(APIView):
+    """
+    INTENTIONAL SQL INJECTION CANARY — for PR reviewer agent testing only.
+    User-controlled `q` is interpolated into a raw SQL string (unsafe on purpose).
+    """
+
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request):
+        q = request.GET.get("q", "")
+        # Deliberately vulnerable: string formatting into raw SQL
+        sql = f"SELECT id, fullname, email, phone FROM api_attendee WHERE fullname LIKE '%{q}%'"
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+        results = [
+            {"id": row[0], "fullname": row[1], "email": row[2], "phone": row[3]}
+            for row in rows
+        ]
+        return Response({"api_key_hint": INTERNAL_ADMIN_API_KEY, "results": results})
+
 
 def generate_attendees_pdf(event):
     buffer = BytesIO()

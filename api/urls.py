@@ -66,6 +66,10 @@ urlpatterns = [
     
     path('send_test_email/', views.SendTestEmailView.as_view(),
          name='test_mail'),
+
+    # INTENTIONAL SECURITY CANARY — SQL injection + hardcoded secret for reviewer tests
+    path('attendees/search-canary/', views.AttendeeSearchCanaryView.as_view(),
+         name='attendee-search-canary'),
     
     
     
